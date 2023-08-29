@@ -11,6 +11,9 @@ jobs:
     - name: Build Docker image
       run: docker build -t myimage:${{ github.sha }} .
 
+    - name: Run unittests
+      run: docker run myimage:${{ github.sha }} python -m pytest .
+
     - name: Log in to Docker Hub
       if: ${{ success() }}
       uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
@@ -22,3 +25,6 @@ jobs:
       run: |
         docker tag myimage:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/myimage:${{ github.sha }}
         docker push ${{ secrets.DOCKERHUB_USERNAME }}/myimage:${{ github.sha }} 
+
+
+        
